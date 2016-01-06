@@ -11,10 +11,6 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/public'));
 
-
-
- 
-
   app.listen(PORT, function() {
 		console.log('Express listening on port ' + PORT + '!');
 	});
