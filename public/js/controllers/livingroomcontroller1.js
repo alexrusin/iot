@@ -1,18 +1,22 @@
 myApp.controller('LivingroomController', ['$scope', '$http', 
 function($scope, $http) {
-	
+	var reqUrl = 'http://172.251.161.40:8080/';
+	$scope.lightstatus = "Cannot get status of the light!";
+	$scope.toggle = false;
 	$http({
 				method: 'GET',
-				url: 'http://192.168.0.102/status'
+				url: reqUrl +'status'
 			}).
 			success(function(data, status, headers, config) {
 
 				if (data.ltstatus === 1) {
-					$scope.lightstatus = "The light in the livingroom is ON!";
+					$scope.lightstatus = "Turn Light Off";
+					$scope.toggle = true;
 				} else if (data.ltstatus === 0) {
-					$scope.lightstatus = "The light in the livingroom is OFF!"
+					$scope.lightstatus = "Turn Light On";
+					$scope.toggle = false;
 				} else {
-					$scope.lightstatus = "Cannot get status of the light in the livingroom";
+					$scope.lightstatus = "Cannot get status of the light!";
 				}
 				
 			}).
@@ -21,20 +25,29 @@ function($scope, $http) {
 				
 			});
 
-	$scope.lightOn = function() {
+	$scope.turnSwitch = function() {
+		var command;
+		if ($scope.toggle){
+			command = 'gpio/0';
+		}	else {
+			command = 'gpio/1'
+		}
+
 		$http({
 				method: 'GET',
-				url: 'http://192.168.0.102/gpio/1'
+				url: reqUrl + command
 			}).
 			success(function(data, status, headers, config) {
 
-				if (data.ltstatus === 1) {
-					$scope.lightstatus = "The light in the livingroom is ON!";
-				} else if (data.ltstatus === 0) {
-					$scope.lightstatus = "The light in the livingroom is OFF!"
-				} else {
-					$scope.lightstatus = "Cannot get status of the light in the livingroom";
-				}
+			if (data.ltstatus === 1) {
+				$scope.lightstatus = "Turn Light Off";
+				$scope.toggle = true;
+			} else if (data.ltstatus === 0) {
+				$scope.lightstatus = "Turn Light On";
+				$scope.toggle = false;
+			} else {
+				$scope.lightstatus = "Light status undefined!"
+			}
 				
 			}).
 			error(function(data, status, headers, config) {
@@ -43,26 +56,6 @@ function($scope, $http) {
 			});
 	};
 
-	$scope.lightOff = function() {
-		$http({
-				method: 'GET',
-				url: 'http://192.168.0.102/gpio/0'
-			}).
-			success(function(data, status, headers, config) {
-
-				if (data.ltstatus === 1) {
-					$scope.lightstatus = "The light in the livingroom is ON!";
-				} else if (data.ltstatus === 0) {
-					$scope.lightstatus = "The light in the livingroom is OFF!"
-				} else {
-					$scope.lightstatus = "Cannot get status of the light in the livingroom";
-				}
-				
-			}).
-			error(function(data, status, headers, config) {
-				$scope.lightstatus = "Oops, an error has occured";
-				
-			});
-	};
+	
 
 }]);

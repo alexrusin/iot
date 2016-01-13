@@ -1,8 +1,7 @@
 <section class="card login">
 	<h2> Living Room</h2>
-	<p>{{lightstatus}}</p>
-	<a href="#/livingroom" class="btn" ng-click = "lightOn()">Turn Light On</a>
-	<a href="#/livingroom" class="btn" ng-click = "lightOff()">Turn Light OFF</a>
+	
+	<p><a href="#/livingroom" class="btn" ng-class="{'btn-active' : toggle}" ng-click = "turnSwitch()">{{lightstatus}}</a></p><br />
 	<br />
 	<a href="#/" >Choose Room</a>
 </section>
